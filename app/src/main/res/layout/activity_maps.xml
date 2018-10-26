@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        tools:context=".MapsActivity"
+        map:uiRotateGestures="false" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/button_shape"
+        android:textColor="@android:color/white"
+        android:text="@string/startButton" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/button"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="30dp"
+        android:background="@drawable/button_shape"
+        android:textColor="@android:color/white"
+        android:text="@string/stopButton" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/seekBar"
+        android:layout_alignTop="@+id/seekBar"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_shape"
+        android:textColor="@android:color/white"
+        android:text="@string/firstSetting" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button3"
+        android:layout_alignBottom="@+id/button3"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_shape"
+        android:text="@string/secondSetting"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button3"
+        android:layout_alignBottom="@+id/button3"
+        android:layout_alignEnd="@+id/seekBar"
+        android:background="@drawable/button_shape"
+        android:text="@string/thirdSetting"
+        android:textColor="@android:color/white" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/map"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="50dp"
+        android:max="10"
+        android:min="3"
+        android:progress="3" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBar"
+        android:layout_alignStart="@+id/seekBar"
+        android:layout_marginBottom="-50dp"
+        android:text="距離を調整してください" />
+
+    <TextView
+        android:id="@+id/ToDoHuText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/button3"
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="15dp"
+        android:textSize="20dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/RosenText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/ToDoHuText"
+        android:layout_below="@+id/ToDoHuText"
+        android:layout_marginTop="6dp"
+        android:textSize="20dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/EkiText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/RosenText"
+        android:layout_below="@+id/RosenText"
+        android:layout_marginTop="6dp"
+        android:textSize="20dp"
+        android:text="" />
+
+</RelativeLayout>

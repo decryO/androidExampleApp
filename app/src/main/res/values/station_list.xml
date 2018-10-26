@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="stati">
+        <item>米原</item>
+        <item>彦根</item>
+        <item>南彦根</item>
+        <item>河瀬</item>
+        <item>稲枝</item>
+        <item>能登川</item>
+        <item>安土</item>
+        <item>近江八幡</item>
+        <item>篠原</item>
+        <item>野洲</item>
+        <item>守山</item>
+        <item>栗東</item>
+        <item>草津</item>
+        <item>南草津</item>
+        <item>瀬田</item>
+        <item>石山</item>
+        <item>膳所</item>
+        <item>大津</item>
+        <item>山科</item>
+        <item>京都</item>
+    </string-array>
+</resources>
