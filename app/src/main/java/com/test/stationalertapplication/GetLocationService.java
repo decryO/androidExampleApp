@@ -156,8 +156,8 @@ public class GetLocationService extends Service {
                 Log.d("2点間の距離", "\n" + String.valueOf(resultRadius) + "Km");
 
                 // AlertDialogが出まくるのを防ぐため、一度出たらcounterをインクリメントして出さなくする。
-                //if (resultRadius < alertLine) {
-                if(counter == 0){
+                //if (resultRadius < alertLine) {   //本番用
+                if(counter == 0){                   //テスト用
                     Intent intent = new Intent(getApplicationContext(), MyBroadcastReceiver.class);
                     // ブロードキャストレシーバーが反応する言葉みたいなやつ
                     // とりあえず適当な言葉を入れているだけなので変更可能
