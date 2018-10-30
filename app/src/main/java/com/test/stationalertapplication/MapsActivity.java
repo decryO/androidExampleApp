@@ -119,6 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     intent.putExtra("Lat", goalLat);
                     intent.putExtra("Lng", goalLng);
                     intent.putExtra("alertLine", (double) alertLine / 1000);
+                    intent.putExtra("goalStation", goalStation);
                     startService(intent);
                     //button1.setVisibility(View.INVISIBLE);
                 }

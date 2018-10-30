@@ -12,12 +12,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 import android.util.Log;
@@ -157,7 +153,7 @@ public class GetLocationService extends Service {
 
                 // AlertDialogが出まくるのを防ぐため、一度出たらcounterをインクリメントして出さなくする。
                 //if (resultRadius < alertLine) {   //本番用
-                if(counter == 0){                   //テスト用
+                if(counter == 1){                   //テスト用
                     Intent intent = new Intent(getApplicationContext(), MyBroadcastReceiver.class);
                     // ブロードキャストレシーバーが反応する言葉みたいなやつ
                     // とりあえず適当な言葉を入れているだけなので変更可能
@@ -165,8 +161,9 @@ public class GetLocationService extends Service {
                     intent.setAction("Location_change");
                     sendBroadcast(intent);
                     ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(1000);
-                    counter++;
+                    //counter++;
                 }
+                counter++;
             }
         };
     }
