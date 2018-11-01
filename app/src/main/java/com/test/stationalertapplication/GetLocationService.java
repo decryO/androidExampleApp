@@ -74,7 +74,7 @@ public class GetLocationService extends Service {
         alertLine = intent.getDoubleExtra("alertLine", 0.3);
         Log.d("MainActivityからの値", "\n緯度" + Lat + "\n経度" + Lng + "\nアラートライン" + alertLine);
 
-        Intent returnIntent = new Intent(this, MapsActivity.class);
+        Intent returnIntent = new Intent(this, MapsFragment.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntentWithParentStack(returnIntent);

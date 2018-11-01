@@ -2,20 +2,25 @@ package com.test.stationalertapplication;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
+import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
@@ -34,7 +39,7 @@ import java.util.ArrayList;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Button button1, button2, button3, button4, button5;
@@ -62,34 +67,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // 駅座標を取得する際、JSONは路線選択に使用したものでよいので、
     // ここに作っておいて、どこからでも呼べるようにする。
-    JSONArray stationList;
+    private JSONArray stationList;
 
+    private MapView mapView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.activity_maps, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapView = (MapView) view.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
         latLng = new LatLng(34.985458, 135.7577551);
-        radiusSeek = findViewById(R.id.seekBar);
-        radiusView = findViewById(R.id.textView);
+        radiusSeek = view.findViewById(R.id.seekBar);
+        radiusView = view.findViewById(R.id.textView);
         preList = getResources().getStringArray(R.array.prefectures);
 
-        button1 = findViewById(R.id.button);
-        button2 = findViewById(R.id.button2);
-        button3 = findViewById(R.id.button3);
-        button4 = findViewById(R.id.button4);
-        button5 = findViewById(R.id.button5);
+        button1 = view.findViewById(R.id.button);
+        button2 = view.findViewById(R.id.button2);
+        button3 = view.findViewById(R.id.button3);
+        button4 = view.findViewById(R.id.button4);
+        button5 = view.findViewById(R.id.button5);
         //button2.setVisibility(View.INVISIBLE);
         button4.setVisibility(View.INVISIBLE);
         button5.setVisibility(View.INVISIBLE);
 
-        PrefectureText = findViewById(R.id.ToDoHuText);
-        LineText = findViewById(R.id.RosenText);
-        StationText = findViewById(R.id.EkiText);
+        PrefectureText = view.findViewById(R.id.ToDoHuText);
+        LineText = view.findViewById(R.id.RosenText);
+        StationText = view.findViewById(R.id.EkiText);
 
     }
 
@@ -105,22 +117,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 if (alertLine == 0 || goallatLng == null) {
-                    FancyToast.makeText(getApplicationContext(), "距離、または駅が選択されていません！", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
+                    FancyToast.makeText(getActivity(), "距離、または駅が選択されていません！", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
                 } else {
-                    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                    ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
                     for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
                         if (GetLocationService.class.getName().equals(serviceInfo.service.getClassName())) {
-                            FancyToast.makeText(getApplicationContext(), "Serviceは起動中です！", FancyToast.LENGTH_LONG, FancyToast.WARNING, true).show();
+                            FancyToast.makeText(getActivity(), "Serviceは起動中です！", FancyToast.LENGTH_LONG, FancyToast.WARNING, true).show();
                             return;
                         }
                     }
-                    FancyToast.makeText(getApplicationContext(), "AlertLineは" + alertLine + "です", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
-                    Intent intent = new Intent(getApplicationContext(), GetLocationService.class);
+                    FancyToast.makeText(getActivity(), "AlertLineは" + alertLine + "です", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+                    Intent intent = new Intent(getActivity(), GetLocationService.class);
                     intent.putExtra("Lat", goalLat);
                     intent.putExtra("Lng", goalLng);
                     intent.putExtra("alertLine", (double) alertLine / 1000);
                     intent.putExtra("goalStation", goalStation);
-                    startService(intent);
+                    getActivity().startService(intent);
                     //button1.setVisibility(View.INVISIBLE);
                 }
             }
@@ -128,16 +140,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MapsActivity.this, GetLocationService.class);
-                stopService(intent);
-                FancyToast.makeText(getApplicationContext(), "アラームを停止しました", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                Intent intent = new Intent(getActivity(), GetLocationService.class);
+                getActivity().stopService(intent);
+                FancyToast.makeText(getActivity(), "アラームを停止しました", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
             }
         });
 
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(MapsActivity.this)
+                new AlertDialog.Builder(getActivity())
                         .setTitle("目的地の都道府県選択")
                         .setItems(R.array.prefectures, new DialogInterface.OnClickListener() {
                             @SuppressLint("StaticFieldLeak")
@@ -148,7 +160,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 //ここで作り直さないともう一度都道府県選択をした場合に路線リストが以前選択された都道府県の路線が残ったままとなり、
                                 //ものすごい長いリストとなってわかりにくくなってしまう。
                                 preArray = new ArrayList<>();
-                                FancyToast.makeText(getApplicationContext(), "取得した文字は" + ans, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                                FancyToast.makeText(getActivity(), "取得した文字は" + ans, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                                 new MyAsyncTask() {
                                     @Override
                                     protected String doInBackground(Void... params) {
@@ -187,7 +199,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 if (preArray.size() != 0) {
                     final CharSequence[] cs = preArray.toArray(new CharSequence[preArray.size()]);
-                    new AlertDialog.Builder(MapsActivity.this)
+                    new AlertDialog.Builder(getActivity())
                             .setTitle("目的地への路線選択")
                             .setItems(cs, new DialogInterface.OnClickListener() {
                                 @SuppressLint("StaticFieldLeak")
@@ -197,7 +209,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     //preArrayを初期化した理由と同様
                                     stationArray = new ArrayList<>();
                                     LineText.setText(ans);
-                                    FancyToast.makeText(getApplicationContext(), "取得した文字は" + ans, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                                    FancyToast.makeText(getActivity(), "取得した文字は" + ans, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                                     new MyAsyncTask() {
                                         @Override
                                         protected String doInBackground(Void... params) {
@@ -227,7 +239,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 }
                             }).show();
                 } else {
-                    FancyToast.makeText(MapsActivity.this, "先に都道府県を選択してください！", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
+                    FancyToast.makeText(getActivity(), "先に都道府県を選択してください！", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
                 }
             }
         });
@@ -237,7 +249,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 if (stationArray.size() != 0) {
                     final CharSequence[] cs = stationArray.toArray(new CharSequence[stationArray.size()]);
-                    new AlertDialog.Builder(MapsActivity.this)
+                    new AlertDialog.Builder(getActivity())
                             .setTitle("目的地の駅選択")
                             .setItems(cs, new DialogInterface.OnClickListener() {
                                 @SuppressLint("StaticFieldLeak")
@@ -245,7 +257,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 public void onClick(DialogInterface dialog, int which) {
                                     goalStation = stationArray.get(which);
                                     StationText.setText(goalStation);
-                                    FancyToast.makeText(getApplicationContext(), "取得した文字は" + goalStation, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                                    FancyToast.makeText(getActivity(), "取得した文字は" + goalStation, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                                     try {
                                         JSONObject anst = stationList.getJSONObject(which);
                                         pregoalLat = anst.getString("y");
@@ -264,7 +276,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }).show();
 
                 } else {
-                    FancyToast.makeText(MapsActivity.this, "先に路線を選択してください！", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
+                    FancyToast.makeText(getActivity(), "先に路線を選択してください！", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
                 }
             }
         });

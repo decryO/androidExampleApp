@@ -59,4 +59,5 @@
         <item name="Okinawa">沖縄県</item>
     </string-array>
 
+    <string name="search">検索</string>
 </resources>

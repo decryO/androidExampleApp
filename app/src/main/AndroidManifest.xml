@@ -36,7 +36,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,10 +61,13 @@
 
         <activity
             android:name=".AlertDialogActivity"
+            android:launchMode="singleInstance"
             android:showOnLockScreen="true"
-            android:theme="@style/Theme.AppCompat.Translucent"
-            android:launchMode="singleInstance">
-        </activity>
-    </application>
+            android:theme="@style/Theme.AppCompat.Translucent" />
+
+        <activity android:name=".SettingActivity" />
+
+        <activity android:name=".MapsFragment" />
+    </application>>
 
 </manifest>
