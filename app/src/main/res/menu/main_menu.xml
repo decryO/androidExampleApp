@@ -17,10 +17,10 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_search"
-        android:icon="@drawable/outline_search_white_18dp"
-        android:title="@string/search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="always" />
+    android:id="@+id/menu_search"
+    android:icon="@drawable/outline_search_white_18dp"
+    android:title="@string/search"
+
+    app:showAsAction="always" />
 
 </menu>

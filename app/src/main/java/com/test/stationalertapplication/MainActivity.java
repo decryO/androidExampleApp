@@ -1,19 +1,23 @@
 package com.test.stationalertapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private Toolbar toolbar;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +55,18 @@ public class MainActivity extends AppCompatActivity {
                 if(id == R.id.action_settings){
                     SettingActivity setFragment = new SettingActivity();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.addToBackStack("");
                     transaction.replace(R.id.container, setFragment);
                     transaction.commit();
+                }else if(id == R.id.menu_search){
+                    SettingActivity setFragment = new SettingActivity();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.addToBackStack("");
+                    transaction.replace(R.id.container, setFragment);
+                    transaction.commit();
+                    onSearchRequested();
                 }
-                return true;
+                return false;
             }
         });
     }
