@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="searchViewStyle">@style/SearchViewTheme3</item>
     </style>
 
     <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.Light.NoActionBar">
@@ -17,9 +18,20 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="AppToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="AppToolbar" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
+    </style>
+
+    <style name="MyThemeOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="searchViewStyle">@style/SearchViewTheme3</item>
+    </style>
+
+    <style name="SearchViewTheme3" parent="Widget.AppCompat.SearchView">
+        <item name="searchIcon">@android:color/transparent</item>
+        <item name="searchHintIcon">@android:color/transparent</item>
+        <item name="queryBackground">@android:color/transparent</item>
+        <item name="submitBackground">@android:color/transparent</item>
     </style>
 
 </resources>

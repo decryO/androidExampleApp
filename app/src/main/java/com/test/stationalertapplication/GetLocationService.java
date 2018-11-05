@@ -9,6 +9,7 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -45,6 +46,8 @@ public class GetLocationService extends Service {
     //距離をまずここに入れる
     private float[] results = new float[1];
 
+    private HeadSetPlugReceiver headSetPlugReceiver;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -68,13 +71,16 @@ public class GetLocationService extends Service {
         String channelId = "default";
         String title = context.getString(R.string.app_name);
 
+        headSetPlugReceiver = new HeadSetPlugReceiver();
+        registerReceiver(headSetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+
         Lat = intent.getDoubleExtra("Lat", 0);
         Lng = intent.getDoubleExtra("Lng", 0);
         goalStation = intent.getStringExtra("goalStation");
         alertLine = intent.getDoubleExtra("alertLine", 0.3);
         Log.d("MainActivityからの値", "\n緯度" + Lat + "\n経度" + Lng + "\nアラートライン" + alertLine);
 
-        Intent returnIntent = new Intent(this, MapsFragment.class);
+        Intent returnIntent = new Intent(this, MainActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntentWithParentStack(returnIntent);
@@ -152,8 +158,8 @@ public class GetLocationService extends Service {
                 Log.d("2点間の距離", "\n" + String.valueOf(resultRadius) + "Km");
 
                 // AlertDialogが出まくるのを防ぐため、一度出たらcounterをインクリメントして出さなくする。
-                //if (resultRadius < alertLine) {   //本番用
-                if(counter == 1){                   //テスト用
+                if (resultRadius < alertLine) {   //本番用
+                //if(counter == 1){                   //テスト用
                     Intent intent = new Intent(getApplicationContext(), MyBroadcastReceiver.class);
                     // ブロードキャストレシーバーが反応する言葉みたいなやつ
                     // とりあえず適当な言葉を入れているだけなので変更可能

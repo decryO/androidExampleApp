@@ -41,10 +41,13 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
 
         <service
@@ -66,10 +69,12 @@
             android:launchMode="singleInstance"
             android:showOnLockScreen="true"
             android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity android:name=".SearchActivity" />
 
-        <activity android:name=".SettingActivity" />
-
-        <activity android:name=".MapsFragment" />
-    </application>>
+        <receiver
+            android:name=".HeadSetPlugReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
+    </application>
 
 </manifest>
