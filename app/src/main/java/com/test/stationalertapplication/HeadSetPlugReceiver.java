@@ -15,13 +15,7 @@ public class HeadSetPlugReceiver extends BroadcastReceiver {
         if(action.equals(Intent.ACTION_HEADSET_PLUG)){
             int state = intent.getIntExtra("state", -1);
             if(state == 0){
-                Intent PLUG_intent = new Intent(context, AlertDialogActivity.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, PLUG_intent, 0);
-                try {
-                    pendingIntent.send();
-                } catch (PendingIntent.CanceledException e) {
-                    e.printStackTrace();
-                }
+                Log.d("\n\n\n\n\nイヤホン状態\n\n\n\n\n", "\n\n\n\n\n抜かれました\n\n\n\n\n");
             }else if(state == 1){
                 Log.d("\n\n\n\n\nイヤホン状態\n\n\n\n\n", "\n\n\n\n\n刺さりました\n\n\n\n\n");
             }

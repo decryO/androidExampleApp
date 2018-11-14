@@ -10,7 +10,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
+        android:background="?android:attr/panelBackground"
         android:theme="@style/Theme.AppCompat.Translucent"/>
 
     <FrameLayout
@@ -36,12 +36,12 @@
                 app:cardBackgroundColor="@android:color/darker_gray"
                 app:cardCornerRadius="5dp">
 
-                <ImageView
-                    android:layout_marginStart="10dp"
-                    android:layout_width="18dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageButton"
-                    android:background="@drawable/baseline_alarm_white_18dp"/>
+                <!--<ImageView-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_width="18dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:id="@+id/imageButton"-->
+                    <!--android:background="@drawable/baseline_alarm_white_18dp"/>-->
 
                 <android.support.v7.widget.SearchView
                     android:id="@+id/search_view"

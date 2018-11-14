@@ -60,4 +60,6 @@
     </string-array>
 
     <string name="search">検索</string>
+    <string name="setting">設定</string>
+    <string name="about_this">このアプリについて</string>
 </resources>

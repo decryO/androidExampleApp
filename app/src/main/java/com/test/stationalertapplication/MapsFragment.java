@@ -127,7 +127,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                             return;
                         }
                     }
-                    FancyToast.makeText(getActivity(), "AlertLineは" + alertLine + "です", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+                    FancyToast.makeText(getActivity(), alertLine+"mでアラームを設定しました", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
                     Intent intent = new Intent(getActivity(), GetLocationService.class);
                     intent.putExtra("Lat", goalLat);
                     intent.putExtra("Lng", goalLng);
@@ -161,7 +161,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                                 //ここで作り直さないともう一度都道府県選択をした場合に路線リストが以前選択された都道府県の路線が残ったままとなり、
                                 //ものすごい長いリストとなってわかりにくくなってしまう。
                                 preArray = new ArrayList<>();
-                                FancyToast.makeText(getActivity(), "取得した文字は" + ans, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                                //FancyToast.makeText(getActivity(), "取得した文字は" + ans, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                                 new MyAsyncTask() {
                                     @Override
                                     protected String doInBackground(Void... params) {
@@ -210,7 +210,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                                     //preArrayを初期化した理由と同様
                                     stationArray = new ArrayList<>();
                                     LineText.setText(ans);
-                                    FancyToast.makeText(getActivity(), "取得した文字は" + ans, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                                    //FancyToast.makeText(getActivity(), "取得した文字は" + ans, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                                     new MyAsyncTask() {
                                         @Override
                                         protected String doInBackground(Void... params) {
@@ -258,7 +258,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                                 public void onClick(DialogInterface dialog, int which) {
                                     goalStation = stationArray.get(which);
                                     StationText.setText(goalStation);
-                                    FancyToast.makeText(getActivity(), "取得した文字は" + goalStation, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                                    //FancyToast.makeText(getActivity(), "取得した文字は" + goalStation, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                                     try {
                                         JSONObject anst = stationList.getJSONObject(which);
                                         pregoalLat = anst.getString("y");

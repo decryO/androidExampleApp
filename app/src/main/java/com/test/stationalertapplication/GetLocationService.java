@@ -72,7 +72,9 @@ public class GetLocationService extends Service {
         String title = context.getString(R.string.app_name);
 
         headSetPlugReceiver = new HeadSetPlugReceiver();
-        registerReceiver(headSetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(headSetPlugReceiver, filter);
 
         Lat = intent.getDoubleExtra("Lat", 0);
         Lng = intent.getDoubleExtra("Lng", 0);
@@ -126,6 +128,7 @@ public class GetLocationService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(headSetPlugReceiver);
         stopLocationUpdates();
     }
 
@@ -158,8 +161,8 @@ public class GetLocationService extends Service {
                 Log.d("2点間の距離", "\n" + String.valueOf(resultRadius) + "Km");
 
                 // AlertDialogが出まくるのを防ぐため、一度出たらcounterをインクリメントして出さなくする。
-                if (resultRadius < alertLine) {   //本番用
-                //if(counter == 1){                   //テスト用
+                //if (resultRadius < alertLine) {   //本番用
+                if(counter == 1){                   //テスト用
                     Intent intent = new Intent(getApplicationContext(), MyBroadcastReceiver.class);
                     // ブロードキャストレシーバーが反応する言葉みたいなやつ
                     // とりあえず適当な言葉を入れているだけなので変更可能
