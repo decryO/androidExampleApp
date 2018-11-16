@@ -10,9 +10,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
+
 public class SearchActivity extends Activity {
 
     private SearchView searchView;
+    private String searchWord;
     private Toolbar toolbar;
 
     @Override
@@ -29,6 +32,7 @@ public class SearchActivity extends Activity {
             }
         });
         setupSearchView();
+        this.searchView.setOnQueryTextListener(onQueryTextListener);
     }
 
     @Override
@@ -41,4 +45,20 @@ public class SearchActivity extends Activity {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
     }
+
+    private SearchView.OnQueryTextListener onQueryTextListener =  new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            if(query != ""){
+                FancyToast.makeText(getApplicationContext(), "入力された文字は"+query, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                searchView.clearFocus();
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            return false;
+        }
+    };
 }

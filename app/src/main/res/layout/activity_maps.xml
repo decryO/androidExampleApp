@@ -75,7 +75,7 @@
 
     <SeekBar
         android:id="@+id/seekBar"
-        style="@style/Widget.AppCompat.SeekBar"
+        style="@style/MySeekBarStyle"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/map"
