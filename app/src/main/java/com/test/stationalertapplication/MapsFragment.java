@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +103,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         PrefectureText = view.findViewById(R.id.ToDoHuText);
         LineText = view.findViewById(R.id.RosenText);
         StationText = view.findViewById(R.id.EkiText);
-
     }
 
     @Override
@@ -268,9 +268,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                                         e.printStackTrace();
                                     }
                                     goallatLng = new LatLng(goalLat, goalLng);
-                                    mMap.addMarker(new MarkerOptions()
-                                            .position(goallatLng)
-                                            .title(goalStation));
+//                                    mMap.addMarker(new MarkerOptions()
+//                                            .position(goallatLng)
+//                                            .title(goalStation));
                                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(goallatLng, 13));
                                 }
                             }).show();
@@ -323,5 +323,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         okhttp3.Response response = client.newCall(request).execute();
         return response.body().string();
+    }
+
+    private void getPrefectures(int flag){
+        switch(flag) {
+            case 0:
+
+            case 1:
+                String prefecture = getArguments().getString("prefecture", "null");
+                String line = getArguments().getString("line", "null");
+                String station = getArguments().getString("station", "null");
+                Log.d("\n\n\n\n\n\n\n\n\nてすと\n\n\n\n\n\n\n\n\n\n\n", "" + prefecture + "\n" + line + "\n" + station);
+        }
     }
 }

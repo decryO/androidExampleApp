@@ -3,6 +3,7 @@ package com.test.stationalertapplication;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.json.JSONArray;
@@ -19,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,10 +29,14 @@ import okhttp3.Request;
 public class SearchActivity extends Activity {
 
     private SearchView searchView;
-    private String searchWord;
     private Toolbar toolbar;
-    OkHttpClient client = new OkHttpClient();
     private String prefecture, line, station;
+    // 駅の座標を入れる
+    private String pregoalLat, pregoalLng;
+    private Double goalLat, goalLng;
+    private JSONArray linelist;
+    OkHttpClient client = new OkHttpClient();
+    private ArrayList<String> stationArray = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,23 +79,17 @@ public class SearchActivity extends Activity {
                     @Override
                     protected String doInBackground(Void... voids) {
                         try {
+                            stationArray = new ArrayList<>();
                             String result = run("http://express.heartrails.com/api/json?method=getStations&name=" + query);
                             JSONObject resJson = new JSONObject(result);
                             JSONObject pre = resJson.getJSONObject("response");
                             if(pre.has("station")){
-                                JSONArray linelist = pre.getJSONArray("station");
-                                JSONObject anst = linelist.getJSONObject(1);
-                                prefecture = anst.getString("prefecture");
-                                line = anst.getString("line");
-                                station = anst.getString("name");
-//                                Intent data = new Intent();
-//                                Bundle bundle = new Bundle();
-//                                bundle.putString("prefecture", prefecture);
-//                                bundle.putString("line", line);
-//                                bundle.putString("name", station);
-//                                data.putExtras(bundle);
-//                                setResult(RESULT_OK, data);
-//                                finish();
+                                linelist = pre.getJSONArray("station");
+                                for (int i = 0; i < linelist.length(); i++) {
+                                    JSONObject anst = linelist.getJSONObject(i);
+                                    String station = anst.getString("line");
+                                    stationArray.add(station);
+                                }
                             }else{
 
                             }
@@ -101,7 +102,33 @@ public class SearchActivity extends Activity {
                     }
                     @Override
                     protected void onPostExecute(String s) {
-                        chooseLine();
+                        if(stationArray.size() <= 1) {
+                            try {
+                                JSONObject anst = linelist.getJSONObject(0);
+                                pregoalLat = anst.getString("y");
+                                pregoalLng = anst.getString("x");
+                                prefecture = anst.getString("prefecture");
+                                line = anst.getString("line");
+                                station = anst.getString("name");
+                                goalLat = Double.valueOf(pregoalLat);
+                                goalLng = Double.valueOf(pregoalLng);
+                                FancyToast.makeText(getApplicationContext(), "駅：" + prefecture + "\n路線：" + line + "\n駅名：" + station + "\n緯度：" + goalLat + "\n経度：" + goalLng, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                                Intent data = new Intent();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("prefecture", prefecture);
+                                bundle.putString("line", line);
+                                bundle.putString("name", station);
+                                bundle.putDouble("goalLat", goalLat);
+                                bundle.putDouble("goalLng", goalLng);
+                                data.putExtras(bundle);
+                                setResult(RESULT_OK, data);
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            chooseLine();
+                        }
                     }
                 }.execute();
                 //searchView.clearFocus();
@@ -116,9 +143,27 @@ public class SearchActivity extends Activity {
     };
 
     private void chooseLine(){
+        final CharSequence[] cs = stationArray.toArray(new CharSequence[stationArray.size()]);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("目的の駅がある路線を選択してください");
-        builder.setMessage("");
+        builder.setItems(cs, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    JSONObject anst = linelist.getJSONObject(which);
+                    pregoalLat = anst.getString("y");
+                    pregoalLng = anst.getString("x");
+                    prefecture = anst.getString("prefecture");
+                    line = anst.getString("line");
+                    station = anst.getString("name");
+                    goalLat = Double.valueOf(pregoalLat);
+                    goalLng = Double.valueOf(pregoalLng);
+                    FancyToast.makeText(getApplicationContext(), "駅："+prefecture+"\n路線："+line+"\n駅名："+station+"\n緯度："+goalLat+"\n経度："+goalLng, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         builder.show();
     }
 

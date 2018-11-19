@@ -87,10 +87,20 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode){
             case 1:
                 if(resultCode == RESULT_OK){
-                    prefecture = bundle.getString("prefecture");
-                    line = bundle.getString("line");
-                    station = bundle.getString("name");
-                    FancyToast.makeText(getApplicationContext(), "prefecture:"+prefecture+"\nline:"+line+"\nstation:"+station, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                    Bundle args = new Bundle();
+                    args.putString("prefecture", bundle.getString("prefecture"));
+                    args.putString("line", bundle.getString("line"));
+                    args.putString("station", bundle.getString("name"));
+                    args.putDouble("goalLat", bundle.getDouble("goalLat"));
+                    args.putDouble("goalLng", bundle.getDouble("goalLng"));
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    SearchResultFragment fragment = new SearchResultFragment();
+                    fragment.setArguments(args);
+                    transaction.addToBackStack("");
+                    transaction.replace(R.id.container, fragment);
+                    transaction.commit();
+
                 }else if(resultCode == RESULT_CANCELED){
                     FancyToast.makeText(getApplicationContext(), "入力された文字はありません.", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                 }
