@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     station = bundle.getString("name");
                     FancyToast.makeText(getApplicationContext(), "prefecture:"+prefecture+"\nline:"+line+"\nstation:"+station, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                 }else if(resultCode == RESULT_CANCELED){
-                    FancyToast.makeText(getApplicationContext(), "入力された文字はありません", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                    FancyToast.makeText(getApplicationContext(), "入力された文字はありません.", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                 }
         }
     }

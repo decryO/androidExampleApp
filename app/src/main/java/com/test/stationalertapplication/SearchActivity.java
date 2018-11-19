@@ -101,7 +101,6 @@ public class SearchActivity extends Activity {
                     }
                     @Override
                     protected void onPostExecute(String s) {
-                        //FancyToast.makeText(getApplicationContext(), "入力された文字は", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                         chooseLine();
                     }
                 }.execute();

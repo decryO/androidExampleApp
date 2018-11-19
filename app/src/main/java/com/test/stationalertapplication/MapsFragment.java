@@ -314,16 +314,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-//    private boolean isYourServiceWorking() {
-//        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-//        for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
-//            if (GetLocationService.class.getName().equals(serviceInfo.service.getClassName())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
     // OkHTTPのURLとかひとまとめにしたやつ
     // いじらないこと
     public String run(String url) throws IOException {
