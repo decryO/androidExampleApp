@@ -1,15 +1,11 @@
 package com.test.stationalertapplication;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.transition.ChangeBounds;
-import android.transition.Explode;
-import android.transition.Fade;
 import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
+
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private Toolbar toolbar;
     private SearchView searchView;
+    private String prefecture, line, station;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void gotoSearch(){
         Intent intent = new Intent(this, SearchActivity.class);
-        startActivityForResult(intent, 100);
+        startActivityForResult(intent, 1);
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getExtras();
+
+        switch(requestCode){
+            case 1:
+                if(resultCode == RESULT_OK){
+                    prefecture = bundle.getString("prefecture");
+                    line = bundle.getString("line");
+                    station = bundle.getString("name");
+                    FancyToast.makeText(getApplicationContext(), "prefecture:"+prefecture+"\nline:"+line+"\nstation:"+station, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                }else if(resultCode == RESULT_CANCELED){
+                    FancyToast.makeText(getApplicationContext(), "入力された文字はありません", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                }
+        }
     }
 }
