@@ -76,18 +76,19 @@ public class SearchResultFragment extends Fragment implements OnMapReadyCallback
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
 
-        prefecture = getArguments().getString("prefecture");
-        line = getArguments().getString("line");
-        station = getArguments().getString("station");
-        goalLat = getArguments().getDouble("goalLat");
-        goalLng = getArguments().getDouble("goalLng");
+        Bundle bundle = getArguments();
+        prefecture = bundle.getString("prefecture");
+        line = bundle.getString("line");
+        station = bundle.getString("station");
+        goalLat = bundle.getDouble("Lat");
+        goalLng = bundle.getDouble("Lng");
+
         goallatLng = new LatLng(goalLat, goalLng);
 
         PrefectureText.setText(prefecture);
         LineText.setText(line);
         StationText.setText(station);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(goallatLng, 13));
-        Log.d("\n\n\n\n\n\n\n\n\nてすと\n\n\n\n\n\n\n\n\n\n\n", "" + prefecture + "\n" + line + "\n" + station);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -75,35 +75,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void gotoSearch(){
         Intent intent = new Intent(this, SearchActivity.class);
-        startActivityForResult(intent, 1);
+        startActivity(intent);
         overridePendingTransition(0, 0);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle = data.getExtras();
-
-        switch(requestCode){
-            case 1:
-                if(resultCode == RESULT_OK){
-                    Bundle args = new Bundle();
-                    args.putString("prefecture", bundle.getString("prefecture"));
-                    args.putString("line", bundle.getString("line"));
-                    args.putString("station", bundle.getString("name"));
-                    args.putDouble("goalLat", bundle.getDouble("goalLat"));
-                    args.putDouble("goalLng", bundle.getDouble("goalLng"));
-
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    SearchResultFragment fragment = new SearchResultFragment();
-                    fragment.setArguments(args);
-                    transaction.addToBackStack("");
-                    transaction.replace(R.id.container, fragment);
-                    transaction.commit();
-
-                }else if(resultCode == RESULT_CANCELED){
-                    FancyToast.makeText(getApplicationContext(), "入力された文字はありません.", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
-                }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Bundle bundle = data.getExtras();
+//
+//        switch(requestCode){
+//            case 1:
+//                if(resultCode == RESULT_OK){
+//                    Bundle args = new Bundle();
+//                    args.putString("prefecture", bundle.getString("prefecture"));
+//                    args.putString("line", bundle.getString("line"));
+//                    args.putString("station", bundle.getString("name"));
+//                    args.putDouble("goalLat", bundle.getDouble("goalLat"));
+//                    args.putDouble("goalLng", bundle.getDouble("goalLng"));
+//
+//                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                    SearchResultFragment fragment = new SearchResultFragment();
+//                    fragment.setArguments(args);
+//                    transaction.addToBackStack("");
+//                    transaction.replace(R.id.container, fragment);
+//                    transaction.commit();
+//
+//                }else if(resultCode == RESULT_CANCELED){
+//                    FancyToast.makeText(getApplicationContext(), "入力された文字はありません.", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+//                }
+//        }
+//    }
 }

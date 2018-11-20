@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">exampleAndroid</string>
+    <string name="app_name">乗り過ごし防止</string>
     <string name="notify_title">乗り過ごし防止アプリ</string>
     <string name="title_activity_maps">乗り過ごし防止</string>
 
@@ -59,7 +59,7 @@
         <item name="Okinawa">沖縄県</item>
     </string-array>
 
-    <string name="search">検索</string>
+    <string name="search">駅名で検索</string>
     <string name="setting">設定</string>
     <string name="about_this">このアプリについて</string>
 </resources>

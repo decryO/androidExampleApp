@@ -7,7 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,10 +29,11 @@ import java.util.ArrayList;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends AppCompatActivity {
 
     private SearchView searchView;
     private Toolbar toolbar;
+    private FragmentManager fragmentManager;
     private String prefecture, line, station;
     // 駅の座標を入れる
     private String pregoalLat, pregoalLng;
@@ -42,6 +46,7 @@ public class SearchActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        fragmentManager = getSupportFragmentManager();
         searchView = findViewById(R.id.search_view);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -69,11 +74,11 @@ public class SearchActivity extends Activity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
     }
 
-    private SearchView.OnQueryTextListener onQueryTextListener =  new SearchView.OnQueryTextListener() {
+    private SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
         @SuppressLint("StaticFieldLeak")
         @Override
         public boolean onQueryTextSubmit(final String query) {
-            if(query != ""){
+            if (query != "") {
                 //FancyToast.makeText(getApplicationContext(), "入力された文字は"+query, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                 new MyAsyncTask() {
                     @Override
@@ -83,14 +88,14 @@ public class SearchActivity extends Activity {
                             String result = run("http://express.heartrails.com/api/json?method=getStations&name=" + query);
                             JSONObject resJson = new JSONObject(result);
                             JSONObject pre = resJson.getJSONObject("response");
-                            if(pre.has("station")){
+                            if (pre.has("station")) {
                                 linelist = pre.getJSONArray("station");
                                 for (int i = 0; i < linelist.length(); i++) {
                                     JSONObject anst = linelist.getJSONObject(i);
                                     String station = anst.getString("line");
                                     stationArray.add(station);
                                 }
-                            }else{
+                            } else {
 
                             }
                         } catch (IOException e) {
@@ -100,9 +105,10 @@ public class SearchActivity extends Activity {
                         }
                         return super.doInBackground(voids);
                     }
+
                     @Override
                     protected void onPostExecute(String s) {
-                        if(stationArray.size() <= 1) {
+                        if (stationArray.size() <= 1) {
                             try {
                                 JSONObject anst = linelist.getJSONObject(0);
                                 pregoalLat = anst.getString("y");
@@ -113,36 +119,46 @@ public class SearchActivity extends Activity {
                                 goalLat = Double.valueOf(pregoalLat);
                                 goalLng = Double.valueOf(pregoalLng);
                                 FancyToast.makeText(getApplicationContext(), "駅：" + prefecture + "\n路線：" + line + "\n駅名：" + station + "\n緯度：" + goalLat + "\n経度：" + goalLng, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
-                                Intent data = new Intent();
+
                                 Bundle bundle = new Bundle();
                                 bundle.putString("prefecture", prefecture);
                                 bundle.putString("line", line);
-                                bundle.putString("name", station);
-                                bundle.putDouble("goalLat", goalLat);
-                                bundle.putDouble("goalLng", goalLng);
-                                data.putExtras(bundle);
-                                setResult(RESULT_OK, data);
-                                finish();
+                                bundle.putString("station", station);
+                                bundle.putDouble("Lat", goalLat);
+                                bundle.putDouble("Lng", goalLng);
+
+                                setFraqgment(1, bundle);
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("Title", "「" + query + "」駅は見つかりませんでした。");
+                                bundle.putString("Message", "検索ワードに「駅」を含むと見つからない駅があります。\n" +
+                                        "検索ワードに誤字や脱字はありませんか？\n" +
+                                        "駅が検索できない場合は路線から駅を選択してください。");
+                                setFraqgment(3, bundle);
                             }
-                        }else{
+                        } else {
                             chooseLine();
                         }
                     }
                 }.execute();
-                //searchView.clearFocus();
+                searchView.clearFocus();
             }
             return true;
         }
 
         @Override
         public boolean onQueryTextChange(String newText) {
-            return false;
+            if (newText.length() == 1) {
+                setFraqgment(0, null);
+            }
+            return true;
         }
     };
 
-    private void chooseLine(){
+    private void chooseLine() {
         final CharSequence[] cs = stationArray.toArray(new CharSequence[stationArray.size()]);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("目的の駅がある路線を選択してください");
@@ -158,13 +174,46 @@ public class SearchActivity extends Activity {
                     station = anst.getString("name");
                     goalLat = Double.valueOf(pregoalLat);
                     goalLng = Double.valueOf(pregoalLng);
-                    FancyToast.makeText(getApplicationContext(), "駅："+prefecture+"\n路線："+line+"\n駅名："+station+"\n緯度："+goalLat+"\n経度："+goalLng, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+                    FancyToast.makeText(getApplicationContext(), "駅：" + prefecture + "\n路線：" + line + "\n駅名：" + station + "\n緯度：" + goalLat + "\n経度：" + goalLng, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("prefecture", prefecture);
+                    bundle.putString("line", line);
+                    bundle.putString("station", station);
+                    bundle.putDouble("Lat", goalLat);
+                    bundle.putDouble("Lng", goalLng);
+
+                    setFraqgment(1, bundle);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
         builder.show();
+    }
+
+    //SearchActivityのresult_containerへ入れるフラグメントの操作メソッド
+    private void setFraqgment(int type, Bundle bundle) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        ProgressFragment P_fragment = new ProgressFragment();
+        SearchResultFragment S_fragment = new SearchResultFragment();
+        NothingResultFragment N_fragment = new NothingResultFragment();
+        switch (type) {
+            case 0:     //検索途中のProgressBarをだすだけ
+                transaction.replace(R.id.result_container, P_fragment);
+                transaction.commit();
+                break;
+            case 1:     //検索が成功し、サービスを開始できる状態にする
+                S_fragment.setArguments(bundle);
+                transaction.replace(R.id.result_container, S_fragment);
+                transaction.commit();
+                break;
+            case 3:     //検索結果がないとき
+                N_fragment.setArguments(bundle);
+                transaction.replace(R.id.result_container, N_fragment);
+                transaction.commit();
+                break;
+        }
     }
 
     public String run(String url) throws IOException {

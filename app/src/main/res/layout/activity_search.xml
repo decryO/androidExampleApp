@@ -3,15 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/frame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:attr/panelBackground"
-        android:theme="@style/Theme.AppCompat.Translucent"/>
+    android:layout_height="match_parent"
+    tools:context=".SearchActivity" >
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -71,5 +66,12 @@
         </FrameLayout>
 
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/result_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    </LinearLayout>
 
 </FrameLayout>
