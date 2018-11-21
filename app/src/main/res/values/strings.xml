@@ -62,4 +62,5 @@
     <string name="search">駅名で検索</string>
     <string name="setting">設定</string>
     <string name="about_this">このアプリについて</string>
+    <string name="open_source_library">オープンソースライブラリについて</string>
 </resources>
