@@ -105,6 +105,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         StationText = view.findViewById(R.id.EkiText);
     }
 
+    //ここでToolbarのタイトルを変更している。
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+
+        //タイトル変更
+        getActivity().setTitle(R.string.title_activity_maps);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -325,15 +335,4 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         return response.body().string();
     }
 
-    private void getPrefectures(int flag){
-        switch(flag) {
-            case 0:
-
-            case 1:
-                String prefecture = getArguments().getString("prefecture", "null");
-                String line = getArguments().getString("line", "null");
-                String station = getArguments().getString("station", "null");
-                Log.d("\n\n\n\n\n\n\n\n\nてすと\n\n\n\n\n\n\n\n\n\n\n", "" + prefecture + "\n" + line + "\n" + station);
-        }
-    }
 }
