@@ -1,4 +1,38 @@
 package com.test.stationalertapplication;
 
-public class ViewPagerFragmentAdapter {
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+public class ViewPagerFragmentAdapter extends FragmentPagerAdapter {
+
+    private CharSequence[] tabTitles = {"路線選択", "プリセット"};
+
+    public ViewPagerFragmentAdapter(FragmentManager fm){
+        super(fm);
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return tabTitles[position];
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                return new MapsFragment();
+            case 1:
+                return new ProgressFragment();
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public int getCount() {
+        return tabTitles.length;
+    }
 }

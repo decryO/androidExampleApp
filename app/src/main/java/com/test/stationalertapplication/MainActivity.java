@@ -1,24 +1,37 @@
 package com.test.stationalertapplication;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private Toolbar toolbar;
-    private SearchView searchView;
-    private String prefecture, line, station;
+    public boolean isAllowedLocation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ViewPagerFragmentAdapter adapter = new ViewPagerFragmentAdapter(getSupportFragmentManager());
+        ViewPager viewPager = findViewById(R.id.container);
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            checkGPSPermission();
+        }
 
         selectMenuItems();
     }
@@ -38,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        MapsFragment fragment = new MapsFragment();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.commit();
+//        MapsFragment fragment = new MapsFragment();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.replace(R.id.container, fragment);
+//        transaction.commit();
     }
 
     @Override
@@ -57,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
 
-                if(id == R.id.action_about){
+                if (id == R.id.action_about) {
                     AboutAppActivity setFragment = new AboutAppActivity();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.addToBackStack("");
                     transaction.replace(R.id.container, setFragment);
                     transaction.commit();
-                }else if(id == R.id.menu_search){
+                } else if (id == R.id.menu_search) {
                     gotoSearch();
                 }
                 return false;
@@ -71,7 +95,56 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void gotoSearch(){
+    public void checkGPSPermission() {
+        int permissionLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        ArrayList<String> reqPermissions = new ArrayList<>();
+
+        if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
+            isAllowedLocation = true;
+            Log.d("debug", "ああああああああああ");
+        } else {
+            reqPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        if (!reqPermissions.isEmpty()) {
+            ActivityCompat.requestPermissions(this, reqPermissions.toArray(new String[reqPermissions.size()]), 101);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 101) {
+            if (grantResults.length > 0) {
+                for (int i = 0; i < permissions.length; i++) {
+                    if (permissions[i].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                            isAllowedLocation = true;
+                        } else {
+                            new AlertDialog.Builder(this, R.style.alertDialogTheme)
+                                    .setTitle("位置情報の取得ができません")
+                                    .setMessage("位置情報パーミッションの許可をしてください")
+                                    .setPositiveButton("設定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkGPSPermission();
+                                        }
+                                    })
+                                    .setNegativeButton("閉じる", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            finish();
+                                        }
+                                    })
+                                    .show();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void gotoSearch() {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
         overridePendingTransition(0, 0);

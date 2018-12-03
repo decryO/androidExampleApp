@@ -47,4 +47,7 @@
         <item name="android:thumbTint">@color/colorPrimaryDark</item>
     </style>
 
+    <style name="alertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+    </style>
+
 </resources>

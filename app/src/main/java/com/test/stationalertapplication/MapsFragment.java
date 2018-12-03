@@ -72,6 +72,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private JSONArray stationList;
 
     private MapView mapView;
+    MainActivity mainActivity = new MainActivity();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
