@@ -93,7 +93,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         preList = getResources().getStringArray(R.array.prefectures);
 
         button1 = view.findViewById(R.id.button);
-        button2 = view.findViewById(R.id.button2);
+//        button2 = view.findViewById(R.id.button2);
         button3 = view.findViewById(R.id.button3);
         button4 = view.findViewById(R.id.button4);
         button5 = view.findViewById(R.id.button5);
@@ -148,14 +148,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), GetLocationService.class);
-                getActivity().stopService(intent);
-                FancyToast.makeText(getActivity(), "アラームを停止しました", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
-            }
-        });
+//        button2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), GetLocationService.class);
+//                getActivity().stopService(intent);
+//                FancyToast.makeText(getActivity(), "アラームを停止しました", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
+//            }
+//        });
 
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
