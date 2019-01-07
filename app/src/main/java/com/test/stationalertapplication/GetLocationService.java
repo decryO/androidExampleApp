@@ -10,9 +10,14 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +30,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+
+import java.io.IOException;
 
 public class GetLocationService extends Service {
     private FusedLocationProviderClient mLocationClient;
@@ -40,13 +47,22 @@ public class GetLocationService extends Service {
     //設定位置の座標と半径を受け取る
     private double Lat, Lng;
     private double alertLine;
-    private String goalStation;
+    private String goalStation, ringtone_String;
     private int counter = 0;
 
     //距離をまずここに入れる
     private float[] results = new float[1];
 
     private HeadSetPlugReceiver headSetPlugReceiver;
+
+    //アラーム関係
+    private SharedPreferences data;
+    private SharedPreferences.Editor editor;
+    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private Uri ringtone_uri;
+    private Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+    private Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
+
 
     @Override
     public void onCreate() {
@@ -64,6 +80,17 @@ public class GetLocationService extends Service {
 
         mLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationRequest = new LocationRequest();
+
+        data = getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+        ringtone_String = data.getString("uri", null);
+        if(ringtone_String != null) {
+            ringtone_uri = Uri.parse(ringtone_String);
+        }
+        if(ringtone_String == null) {
+
+        }else {
+            ringtone = RingtoneManager.getRingtone(this, ringtone_uri);
+        }
     }
 
     @Override
@@ -111,6 +138,7 @@ public class GetLocationService extends Service {
                     .setContentTitle(title)
                     .setSmallIcon(R.drawable.baseline_alarm_white_18dp)
                     .setContentText("目的地：" + goalStation + "アラームをセット中です")
+                    //.setContentText("アラームタイトル:"+ringtone.getTitle(getApplicationContext()))
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setWhen(System.currentTimeMillis())
@@ -130,6 +158,10 @@ public class GetLocationService extends Service {
         super.onDestroy();
         unregisterReceiver(headSetPlugReceiver);
         stopLocationUpdates();
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
 
     @Override
@@ -163,6 +195,19 @@ public class GetLocationService extends Service {
                 // AlertDialogが出まくるのを防ぐため、一度出たらcounterをインクリメントして出さなくする。
                 if (resultRadius < alertLine) {   //本番用
                 //if(counter == 1){                   //テスト用
+                    if(ringtone_String != null){
+                        try {
+                            playRingtone(ringtone_uri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else if (uri != null) {
+                        try {
+                            playRingtone(uri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     Intent intent = new Intent(getApplicationContext(), MyBroadcastReceiver.class);
                     // ブロードキャストレシーバーが反応する言葉みたいなやつ
                     // とりあえず適当な言葉を入れているだけなので変更可能
@@ -175,6 +220,27 @@ public class GetLocationService extends Service {
                 counter++;
             }
         };
+    }
+
+    private void playRingtone(Uri uri) throws IOException {
+        mediaPlayer.setDataSource(this, uri);
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+            }
+        });
+        mediaPlayer.prepareAsync();
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+        });
     }
 
     private void startLocationUpdates() {

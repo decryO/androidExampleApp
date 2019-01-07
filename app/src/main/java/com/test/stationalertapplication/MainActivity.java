@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private Toolbar toolbar;
+    private TabLayout tabLayout;
     public boolean isAllowedLocation = false;
 
     @Override
@@ -50,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+        Log.d("ああああああああああああああああ", "" + tabLayout.getSelectedTabPosition());
 
         if (Build.VERSION.SDK_INT >= 23) {
             checkGPSPermission();
@@ -72,7 +74,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            inflater.inflate(R.menu.main_menu, menu);
+        } else if (tabLayout.getSelectedTabPosition() == 1) {
+            inflater.inflate(R.menu.sub_menu, menu);
+        }
         return true;
     }
 
@@ -85,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.action_settings) {
                     Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                     startActivity(intent);
-                }else if (id == R.id.action_about) {
+                } else if (id == R.id.action_about) {
                     AboutAppActivity setFragment = new AboutAppActivity();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.addToBackStack("");
@@ -93,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
                     transaction.commit();
                 } else if (id == R.id.menu_search) {
                     gotoSearch();
+                } else if (id == R.id.menu_add) {
+                    gotoAddPreset();
                 }
                 return false;
             }
@@ -152,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
         overridePendingTransition(0, 0);
+    }
+
+    private void gotoAddPreset() {
+        Intent intent = new Intent(this, AddPresetActivity.class);
+        startActivity(intent);
     }
 
 }

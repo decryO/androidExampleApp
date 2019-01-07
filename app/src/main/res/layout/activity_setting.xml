@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".SettingActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </android.support.design.widget.AppBarLayout>
+
     <TextView
         android:id="@+id/ringtone_text"
         android:layout_width="wrap_content"
@@ -26,4 +43,21 @@
         android:text="選択"
         tools:layout_editor_absoluteX="280dp"
         tools:layout_editor_absoluteY="259dp" />
+
+    <Button
+        android:id="@+id/play_ringtone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:text="再生" />
+
+    <Button
+        android:id="@+id/stop_ringtone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="停止" />
 </RelativeLayout>

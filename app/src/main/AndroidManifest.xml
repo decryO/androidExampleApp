@@ -86,6 +86,7 @@
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".AddPresetActivity"></activity>
     </application>
 
 </manifest>
