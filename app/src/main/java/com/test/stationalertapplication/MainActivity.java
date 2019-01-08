@@ -3,6 +3,7 @@ package com.test.stationalertapplication;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 縦画面
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Slide().setDuration(10000));
         //setContentViewを↑のgetWindowより上に配置するとエラーが出るのでここに置く
@@ -89,14 +92,9 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.action_settings) {
-                    Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-                    startActivity(intent);
+                    gotoSetting();
                 } else if (id == R.id.action_about) {
-                    AboutAppActivity setFragment = new AboutAppActivity();
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.addToBackStack("");
-                    transaction.replace(R.id.container, setFragment);
-                    transaction.commit();
+                    gotoAboutThisApp();
                 } else if (id == R.id.menu_search) {
                     gotoSearch();
                 } else if (id == R.id.menu_add) {
@@ -154,6 +152,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void gotoSetting() {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
+
+    private void gotoAboutThisApp() {
+        Intent intent = new Intent(this, AboutAppActivity.class);
+        startActivity(intent);
     }
 
     private void gotoSearch() {

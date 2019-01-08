@@ -50,4 +50,9 @@
     <style name="alertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
     </style>
 
+    <style name="custom_list_style" parent="Widget.AppCompat.ListView">
+        <item name="android:subtitleTextColor"></item>
+
+    </style>
+
 </resources>
