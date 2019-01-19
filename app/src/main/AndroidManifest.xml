@@ -63,6 +63,9 @@
             android:name=".AboutAppActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".StationDetailActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".SettingActivity"
             android:screenOrientation="portrait" />

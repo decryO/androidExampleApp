@@ -49,11 +49,13 @@ public class AboutAppActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
+                        Intent intent = new Intent(getApplicationContext(), StationDetailActivity.class);
+                        startActivity(intent);
                         break;
                     case 1:
-                        Intent intent = new Intent(getApplicationContext(), OssLicensesMenuActivity.class);
-                        intent.putExtra("title", "オープンソースライブラリ");
-                        startActivity(intent);
+                        Intent OssIntent = new Intent(getApplicationContext(), OssLicensesMenuActivity.class);
+                        OssIntent.putExtra("title", "オープンソースライブラリ");
+                        startActivity(OssIntent);
                         break;
                 }
             }

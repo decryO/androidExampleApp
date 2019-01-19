@@ -14,6 +14,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.AudioDeviceInfo;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -53,7 +55,7 @@ public class GetLocationService extends Service {
     //距離をまずここに入れる
     private float[] results = new float[1];
 
-    private HeadSetPlugReceiver headSetPlugReceiver;
+    //private HeadSetPlugReceiver headSetPlugReceiver;
 
     //アラーム関係
     private SharedPreferences data;
@@ -62,7 +64,8 @@ public class GetLocationService extends Service {
     private Uri ringtone_uri;
     private Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
     private Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
-
+    private AudioManager mAudioManager;
+    private Boolean flag = false;
 
     @Override
     public void onCreate() {
@@ -80,6 +83,7 @@ public class GetLocationService extends Service {
 
         mLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationRequest = new LocationRequest();
+        mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
         data = getSharedPreferences("DataSave", Context.MODE_PRIVATE);
         ringtone_String = data.getString("uri", null);
@@ -98,10 +102,10 @@ public class GetLocationService extends Service {
         String channelId = "default";
         String title = context.getString(R.string.app_name);
 
-        headSetPlugReceiver = new HeadSetPlugReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_HEADSET_PLUG);
-        registerReceiver(headSetPlugReceiver, filter);
+        //headSetPlugReceiver = new HeadSetPlugReceiver();
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(Intent.ACTION_HEADSET_PLUG);
+//        registerReceiver(headSetPlugReceiver, filter);
 
         Lat = intent.getDoubleExtra("Lat", 0);
         Lng = intent.getDoubleExtra("Lng", 0);
@@ -156,7 +160,7 @@ public class GetLocationService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(headSetPlugReceiver);
+        //unregisterReceiver(headSetPlugReceiver);
         stopLocationUpdates();
         mediaPlayer.stop();
         mediaPlayer.reset();
@@ -193,21 +197,27 @@ public class GetLocationService extends Service {
                 Log.d("2点間の距離", "\n" + String.valueOf(resultRadius) + "Km");
 
                 // AlertDialogが出まくるのを防ぐため、一度出たらcounterをインクリメントして出さなくする。
-                if (resultRadius < alertLine) {   //本番用
-                //if(counter == 1){                   //テスト用
-                    if(ringtone_String != null){
-                        try {
-                            playRingtone(ringtone_uri);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }else if (uri != null) {
-                        try {
-                            playRingtone(uri);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                //if (resultRadius < alertLine) {   //本番用
+                if(counter == 1){                   //テスト用
+
+                    startFoundDevice();
+
+                    if(flag) {
+                        if (ringtone_String != null) {
+                            try {
+                                playRingtone(ringtone_uri);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else if (uri != null) {
+                            try {
+                                playRingtone(uri);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
+
                     Intent intent = new Intent(getApplicationContext(), MyBroadcastReceiver.class);
                     // ブロードキャストレシーバーが反応する言葉みたいなやつ
                     // とりあえず適当な言葉を入れているだけなので変更可能
@@ -215,7 +225,7 @@ public class GetLocationService extends Service {
                     intent.setAction("Location_change");
                     sendBroadcast(intent);
                     ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(1000);
-                    //counter++;
+                    counter++;
                 }
                 counter++;
             }
@@ -243,6 +253,18 @@ public class GetLocationService extends Service {
         });
     }
 
+    public void startFoundDevice() {
+        AudioDeviceInfo[] audioDevices = mAudioManager.getDevices(AudioManager.GET_DEVICES_ALL);
+        Log.d("\n\n\n\nおおおおおおおおおおおおおおおおおおおおおおおおおおおお", "おおおおおおおおおおおおああああああああああああ");
+        for (AudioDeviceInfo audio_device : audioDevices) {
+            String temp = myAudioTypeToReadableString(audio_device.getType());
+            if(temp.equals("TYPE_WIRED_HEADSET") || temp.equals("TYPE_WIRED_HEADPHONE")) {
+                flag = true;
+            }
+            Log.d("\n\n\n\nおおおおおおおおおおおおおおおおおおおおおおおおおおおお", temp + "\n\n");
+        }
+    }
+
     private void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -252,6 +274,40 @@ public class GetLocationService extends Service {
 
     private void stopLocationUpdates() {
         mLocationClient.removeLocationUpdates(mLocationCallback);
+    }
+
+    private String myAudioTypeToReadableString(int type) {
+        //https://developer.android.com/reference/android/media/AudioDeviceInfo.html
+        switch (type) {
+            case 1:
+                return "TYPE_BUILTIN_EARPIECE";
+            case 2:
+                return "TYPE_BUILTIN_SPEAKER";
+            case 3:
+                return "TYPE_WIRED_HEADSET";
+            case 4:
+                return "TYPE_WIRED_HEADPHONES";
+            case 5:
+                return "TYPE_LINE_ANALOG";
+            case 6:
+                return "TYPE_LINE_DIGITAL";
+            case 7:
+                return "TYPE_BLUETOOTH_SCO";
+            case 8:
+                return "TYPE_BLUETOOTH_A2DP";
+            //～省略～
+            case 15:
+                return "TYPE_BUILTIN_MIC";
+            case 16:
+                return "TYPE_FM_TUNER";
+            case 17:
+                return "TYPE_TV_TUNER";
+            case 18:
+                return "TYPE_TELEPHONY";
+            //～省略～
+            default:    //0
+                return "TYPE_UNKNOWN";
+        }
     }
 
 }
