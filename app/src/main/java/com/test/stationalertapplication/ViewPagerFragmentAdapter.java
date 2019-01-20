@@ -25,7 +25,7 @@ public class ViewPagerFragmentAdapter extends FragmentPagerAdapter {
             case 0:
                 return new MapsFragment();
             case 1:
-                return new ProgressFragment();
+                return new PresetFragment();
             default:
                 return null;
         }
