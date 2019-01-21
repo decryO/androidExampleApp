@@ -14,7 +14,9 @@ import java.util.ArrayList;
 
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHolder> {
     
-    private ArrayList<String> mDataset = new ArrayList<>();
+    private ArrayList<String> lineData = new ArrayList<>();
+    private ArrayList<String> stationData = new ArrayList<>();
+    private ArrayList<Integer> alertLineData = new ArrayList<>();
     private OnRecyclerListener mListener;
     private Context mContext;
 
@@ -30,9 +32,11 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
         }
     }
 
-    public RecycleAdapter(Context context, ArrayList<String> myDataset, OnRecyclerListener listener) {
+    public RecycleAdapter(Context context, ArrayList<String> lineData, ArrayList<String> stationData, ArrayList<Integer> alertLineData, OnRecyclerListener listener) {
         this.mContext = context;
-        this.mDataset = myDataset;
+        this.lineData = lineData;
+        this.stationData = stationData;
+        this.alertLineData = alertLineData;
         this.mListener = listener;
     }
 
@@ -48,7 +52,9 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int i) {
-        holder.presetLine.setText(mDataset.get(i));
+        holder.presetLine.setText(lineData.get(i));
+        holder.presetStation.setText(stationData.get(i));
+        holder.presetAlertLine.setText(String.valueOf(alertLineData.get(i)));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +65,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return stationData.size();
     }
 }
