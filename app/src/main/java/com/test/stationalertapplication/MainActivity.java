@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 
 import java.util.ArrayList;
@@ -100,6 +101,17 @@ public class MainActivity extends AppCompatActivity {
                     gotoAddPreset();
                 }
                 return false;
+            }
+        });
+    }
+
+    public void settingToolbar(String title) {
+        toolbar.setTitle(title);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
             }
         });
     }

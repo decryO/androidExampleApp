@@ -1,25 +1,28 @@
 package com.test.stationalertapplication;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class PresetFragment extends Fragment {
+public class PresetFragment extends Fragment implements OnRecyclerListener {
 
-    private Activity mActivity = null;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private OnRecyclerListener mListener;
 
     private ArrayList<String> myDataset = new ArrayList<>();
 
@@ -43,9 +46,25 @@ public class PresetFragment extends Fragment {
             myDataset.add("Data_0" + String.valueOf(i));
         }
 
-        mAdapter = new RecycleAdapter(myDataset);
+        mAdapter = new RecycleAdapter(getContext(), myDataset, this);
         mRecyclerView.setAdapter(mAdapter);
         RecycleClick();
+    }
+
+    @Override
+    public void onRecyclerClicked(View v, int position) {
+        TextView lineText = (TextView)v.findViewById(R.id.preset_line);
+        TextView stationText = (TextView)v.findViewById(R.id.preset_station);
+        TextView alertText = (TextView)v.findViewById(R.id.preset_alertline);
+        Toast.makeText(getActivity(), lineText.getText().toString()+"\n"+
+                stationText.getText().toString()+"\n"+
+                alertText.getText().toString(), Toast.LENGTH_SHORT).show();
+//        FragmentManager fragmentManager = getFragmentManager();
+//        ProgressFragment fragment = new ProgressFragment();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.replace(R.id.container, fragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
     }
 
     private void RecycleClick() {

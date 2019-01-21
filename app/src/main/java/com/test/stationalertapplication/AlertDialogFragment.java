@@ -12,7 +12,7 @@ public class AlertDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        Dialog dialog = builder.setTitle("到着しました").setMessage("停止を押すとアラームを停止します").setPositiveButton("停止", new DialogInterface.OnClickListener() {
+        Dialog dialog = builder.setTitle("まもなく指定駅に到着します").setMessage("停止を押すとアラームを停止します").setPositiveButton("停止", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String text = "Stop";

@@ -13,31 +13,27 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHolder> {
-
-    private Context context;
+    
     private ArrayList<String> mDataset = new ArrayList<>();
+    private OnRecyclerListener mListener;
+    private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView presetLine, presetStation, presetAlertLine;
 
         public ViewHolder(View v) {
             super(v);
+
             presetLine = (TextView)v.findViewById(R.id.preset_line);
             presetStation = (TextView)v.findViewById(R.id.preset_station);
             presetAlertLine = (TextView)v.findViewById(R.id.preset_alertline);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("ああああああああああああああああ","いいいいいいいいいいいいいいいいいい");
-                    
-                }
-            });
         }
     }
 
-    public RecycleAdapter(ArrayList<String> myDataset) {
-        mDataset = myDataset;
+    public RecycleAdapter(Context context, ArrayList<String> myDataset, OnRecyclerListener listener) {
+        this.mContext = context;
+        this.mDataset = myDataset;
+        this.mListener = listener;
     }
 
     @NonNull
@@ -51,8 +47,14 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecycleAdapter.ViewHolder holder, int position) {
-        holder.presetLine.setText(mDataset.get(position));
+    public void onBindViewHolder(ViewHolder holder, final int i) {
+        holder.presetLine.setText(mDataset.get(i));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onRecyclerClicked(v, i);
+            }
+        });
     }
 
     @Override
