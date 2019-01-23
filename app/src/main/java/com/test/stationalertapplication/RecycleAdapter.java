@@ -17,11 +17,12 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
     private ArrayList<String> lineData = new ArrayList<>();
     private ArrayList<String> stationData = new ArrayList<>();
     private ArrayList<Integer> alertLineData = new ArrayList<>();
+    private ArrayList<String> timeData = new ArrayList<>();
     private OnRecyclerListener mListener;
     private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView presetLine, presetStation, presetAlertLine;
+        public TextView presetLine, presetStation, presetAlertLine, timehold;
 
         public ViewHolder(View v) {
             super(v);
@@ -29,14 +30,16 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
             presetLine = (TextView)v.findViewById(R.id.preset_line);
             presetStation = (TextView)v.findViewById(R.id.preset_station);
             presetAlertLine = (TextView)v.findViewById(R.id.preset_alertline);
+            timehold = (TextView)v.findViewById(R.id.numbertext);
         }
     }
 
-    public RecycleAdapter(Context context, ArrayList<String> lineData, ArrayList<String> stationData, ArrayList<Integer> alertLineData, OnRecyclerListener listener) {
+    public RecycleAdapter(Context context, ArrayList<String> lineData, ArrayList<String> stationData, ArrayList<Integer> alertLineData, ArrayList<String> timeData,OnRecyclerListener listener) {
         this.mContext = context;
         this.lineData = lineData;
         this.stationData = stationData;
         this.alertLineData = alertLineData;
+        this.timeData = timeData;
         this.mListener = listener;
     }
 
@@ -55,6 +58,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
         holder.presetLine.setText(lineData.get(i));
         holder.presetStation.setText(stationData.get(i));
         holder.presetAlertLine.setText(String.valueOf(alertLineData.get(i)));
+        holder.timehold.setText(timeData.get(i));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,5 +70,9 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
     @Override
     public int getItemCount() {
         return stationData.size();
+    }
+
+    public void refresh() {
+        notifyDataSetChanged();
     }
 }

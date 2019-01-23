@@ -9,12 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <CheckBox
-            android:id="@+id/recycle_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -53,6 +47,16 @@
                     android:layout_below="@+id/preset_station"
                     android:text="アラートライン"
                     android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/numbertext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignTop="@+id/preset_line"
+                    android:text=""
+                    android:visibility="invisible"/>
 
             </RelativeLayout>
 

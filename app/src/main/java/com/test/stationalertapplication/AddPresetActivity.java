@@ -2,10 +2,12 @@ package com.test.stationalertapplication;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,7 +33,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -68,6 +73,9 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
     private MapView mapView;
     private Toolbar toolbar;
 
+    private SQLiteDatabase db;
+    private DBOpenHelper helper;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +87,13 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
+
+        if (helper == null) {
+            helper = new DBOpenHelper(getApplicationContext());
+        }
+        if (db == null) {
+            db = helper.getReadableDatabase();
+        }
     }
 
     @Override
@@ -119,6 +134,47 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
         // GoogleMapのオプションはLayoutに記載してある
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if (alertLine == 0 || goallatLng == null) {
+//                    FancyToast.makeText(getApplicationContext(), "距離、または駅が選択されていません！", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
+//                } else {
+//                    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+//                    for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
+//                        if (GetLocationService.class.getName().equals(serviceInfo.service.getClassName())) {
+//                            FancyToast.makeText(getApplicationContext(), "Serviceは起動中です！", FancyToast.LENGTH_LONG, FancyToast.WARNING, true).show();
+//                            return;
+//                        }
+//                    }
+//                    FancyToast.makeText(getApplicationContext(), alertLine+"mでアラームを設定しました", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+//                    Intent intent = new Intent();
+//                    intent.putExtra("Lat", goalLat);
+//                    intent.putExtra("Lng", goalLng);
+//                    intent.putExtra("alertLine", (double) alertLine / 1000);
+//                    intent.putExtra("goalStation", goalStation);
+//
+//                }
+                SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss.SSS", Locale.JAPAN);
+                String date = df.format(new Date());
+                ContentValues values = new ContentValues();
+                values.put("line", date);
+                values.put("stationname", "駅");
+                values.put("alertline", 8);
+                values.put("lat", 0);
+                values.put("lng", 0);
+
+                db.insert("stationdb", null, values);
+
+                Intent data = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("test.String", "あいうえお");
+                data.putExtras(bundle);
+                setResult(RESULT_OK, data);
+                finish();
+            }
+        });
 
         button3.setOnClickListener(new View.OnClickListener() {
             @Override

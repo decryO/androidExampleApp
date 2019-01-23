@@ -49,38 +49,31 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-
         <activity
             android:name=".AboutAppActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".StationDetailActivity"
+        <activity
+            android:name=".StationDetailActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".SettingActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".AddPresetActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".AlertDialogActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:showOnLockScreen="true"
             android:theme="@style/Theme.AppCompat.Translucent" />
-
         <activity
             android:name=".SearchActivity"
             android:screenOrientation="portrait" />
@@ -98,7 +91,6 @@
                 <action android:name="Location_change" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".HeadSetPlugReceiver"
             android:enabled="true"
@@ -107,6 +99,7 @@
                 <action android:name="android.intent.action.HEADSET_PLUG" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

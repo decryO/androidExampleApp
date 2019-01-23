@@ -1,15 +1,18 @@
 package com.test.stationalertapplication;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +21,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
@@ -26,8 +31,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     public boolean isAllowedLocation = false;
+
+    private SQLiteDatabase db;
+    private DBOpenHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         ViewPagerFragmentAdapter adapter = new ViewPagerFragmentAdapter(getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.container);
         viewPager.setOffscreenPageLimit(2);
@@ -56,10 +69,16 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-        Log.d("ああああああああああああああああ", "" + tabLayout.getSelectedTabPosition());
 
         if (Build.VERSION.SDK_INT >= 23) {
             checkGPSPermission();
+        }
+
+        if (helper == null) {
+            helper = new DBOpenHelper(getApplicationContext());
+        }
+        if (db == null) {
+            db = helper.getReadableDatabase();
         }
 
         selectMenuItems();
@@ -68,10 +87,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        MapsFragment fragment = new MapsFragment();
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        transaction.replace(R.id.container, fragment);
-//        transaction.commit();
     }
 
     @Override
@@ -98,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.menu_search) {
                     gotoSearch();
                 } else if (id == R.id.menu_add) {
-                    gotoAddPreset();
+                    //gotoAddPreset();
+                    insertData();
                 }
                 return false;
             }
@@ -186,4 +202,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void insertData(){
+
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss.SSS", Locale.JAPAN);
+        String date = df.format(new Date());
+        ContentValues values = new ContentValues();
+        values.put("line", date);
+        values.put("stationname", "駅");
+        values.put("alertline", 8);
+        values.put("lat", 0);
+        values.put("lng", 0);
+        values.put("time", date);
+
+        db.insert("stationdb", null, values);
+    }
 }
