@@ -10,8 +10,6 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,14 +146,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-//        button2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), GetLocationService.class);
-//                getActivity().stopService(intent);
-//                FancyToast.makeText(getActivity(), "アラームを停止しました", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
-//            }
-//        });
 
         button3.setOnClickListener(new View.OnClickListener() {
             @Override

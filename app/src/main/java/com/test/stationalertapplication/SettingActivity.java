@@ -38,8 +38,6 @@ public class SettingActivity extends AppCompatActivity {
     SettingAdapter adapter;
 
     private Toolbar toolbar;
-    private Button select_ringtone, play_ringtone, stop_ringtone;
-    private TextView ringtone_text;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

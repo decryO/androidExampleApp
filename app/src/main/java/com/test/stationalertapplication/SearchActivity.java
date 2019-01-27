@@ -82,7 +82,6 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public boolean onQueryTextSubmit(final String query) {
             if (query != "") {
-                //FancyToast.makeText(getApplicationContext(), "入力された文字は"+query, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                 new MyAsyncTask() {
                     @Override
                     protected String doInBackground(Void... voids) {
@@ -121,7 +120,6 @@ public class SearchActivity extends AppCompatActivity {
                                 station = anst.getString("name");
                                 goalLat = Double.valueOf(pregoalLat);
                                 goalLng = Double.valueOf(pregoalLng);
-                                FancyToast.makeText(getApplicationContext(), "駅：" + prefecture + "\n路線：" + line + "\n駅名：" + station + "\n緯度：" + goalLat + "\n経度：" + goalLng, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
 
                                 Bundle bundle = new Bundle();
                                 bundle.putString("prefecture", prefecture);
@@ -177,7 +175,6 @@ public class SearchActivity extends AppCompatActivity {
                     station = anst.getString("name");
                     goalLat = Double.valueOf(pregoalLat);
                     goalLng = Double.valueOf(pregoalLng);
-                    FancyToast.makeText(getApplicationContext(), "駅：" + prefecture + "\n路線：" + line + "\n駅名：" + station + "\n緯度：" + goalLat + "\n経度：" + goalLng, FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
 
                     Bundle bundle = new Bundle();
                     bundle.putString("prefecture", prefecture);

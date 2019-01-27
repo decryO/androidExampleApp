@@ -61,7 +61,6 @@ public class SearchResultFragment extends Fragment implements OnMapReadyCallback
         radiusView = view.findViewById(R.id.result_textView);
 
         button1 = view.findViewById(R.id.result_button);
-        button2 = view.findViewById(R.id.result_button2);
 
         PrefectureText = view.findViewById(R.id.result_ToDoHuText);
         LineText = view.findViewById(R.id.result_RosenText);

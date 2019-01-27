@@ -22,12 +22,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <Button
-        android:id="@+id/testButton"
+    <TextView
+        android:id="@+id/eki_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Button" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/appbar_layout"
+        android:text="" />
 
 
 </RelativeLayout>

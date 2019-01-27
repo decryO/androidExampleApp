@@ -35,7 +35,7 @@
         map:uiRotateGestures="false" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/add_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -45,40 +45,40 @@
         android:textColor="@android:color/white" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/add_ToDoFu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/seekBar"
-        android:layout_alignTop="@+id/seekBar"
+        android:layout_alignStart="@+id/add_seekBar"
+        android:layout_alignTop="@+id/add_seekBar"
         android:layout_marginTop="30dp"
         android:background="@drawable/button_shape"
-        android:textColor="@android:color/white"
-        android:text="@string/firstSetting" />
+        android:text="@string/firstSetting"
+        android:textColor="@android:color/white" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/add_Line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button3"
-        android:layout_alignBottom="@+id/button3"
+        android:layout_alignBaseline="@+id/add_ToDoFu"
+        android:layout_alignBottom="@+id/add_ToDoFu"
         android:layout_centerHorizontal="true"
         android:background="@drawable/button_shape"
         android:text="@string/secondSetting"
         android:textColor="@android:color/white" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/add_Station"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button3"
-        android:layout_alignBottom="@+id/button3"
-        android:layout_alignEnd="@+id/seekBar"
+        android:layout_alignBaseline="@+id/add_ToDoFu"
+        android:layout_alignBottom="@+id/add_ToDoFu"
+        android:layout_alignEnd="@+id/add_seekBar"
         android:background="@drawable/button_shape"
         android:text="@string/thirdSetting"
         android:textColor="@android:color/white" />
 
     <SeekBar
-        android:id="@+id/seekBar"
+        android:id="@+id/add_seekBar"
         style="@style/MySeekBarStyle"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
@@ -90,40 +90,40 @@
         android:progress="3" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/add_alert_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/seekBar"
-        android:layout_alignStart="@+id/seekBar"
+        android:layout_above="@+id/add_seekBar"
+        android:layout_alignStart="@+id/add_seekBar"
         android:layout_marginBottom="-50dp"
         android:text="距離を調整してください" />
 
     <TextView
-        android:id="@+id/ToDoHuText"
+        android:id="@+id/add_ToDoHuText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button3"
-        android:layout_below="@+id/button3"
+        android:layout_alignStart="@+id/add_ToDoFu"
+        android:layout_below="@+id/add_ToDoFu"
         android:layout_marginTop="15dp"
         android:textSize="20dp"
         android:text="" />
 
     <TextView
-        android:id="@+id/RosenText"
+        android:id="@+id/add_LineText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/ToDoHuText"
-        android:layout_below="@+id/ToDoHuText"
+        android:layout_alignStart="@+id/add_ToDoHuText"
+        android:layout_below="@+id/add_ToDoHuText"
         android:layout_marginTop="6dp"
         android:textSize="20dp"
         android:text="" />
 
     <TextView
-        android:id="@+id/EkiText"
+        android:id="@+id/add_stationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/RosenText"
-        android:layout_below="@+id/RosenText"
+        android:layout_alignStart="@+id/add_LineText"
+        android:layout_below="@+id/add_LineText"
         android:layout_marginTop="6dp"
         android:textSize="20dp"
         android:text="" />

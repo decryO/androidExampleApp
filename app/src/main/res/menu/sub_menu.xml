@@ -16,11 +16,4 @@
         android:orderInCategory="200"
         app:showAsAction="never" />
 
-    <item
-    android:id="@+id/menu_add"
-    android:icon="@drawable/ic_add_black_24dp"
-    android:title="@string/add_preset"
-
-    app:showAsAction="always" />
-
 </menu>

@@ -61,13 +61,12 @@
 
     <string name="search">駅名で検索</string>
     <string name="add_preset">追加</string>
+    <string name="stopservice">アラームを解除する</string>
     <string name="setting_list_ringtone">到着時のアラーム音</string>
     <string name="ringtone_setting_title">アラーム音設定</string>
     <string name="setting">設定</string>
     <string name="about_this">このアプリについて</string>
     <string name="open_source_library">オープンソースライブラリについて</string>
-    <string name="title_activity_bottom">Bottom</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="stop_h1_text">アラームがセットされています</string>
+    <string name="stoptext">アラームを停止する場合は停止ボタンをタップしてください</string>
 </resources>

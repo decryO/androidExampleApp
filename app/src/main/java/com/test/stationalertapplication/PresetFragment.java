@@ -2,7 +2,6 @@ package com.test.stationalertapplication;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,8 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -22,18 +19,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shashank.sony.fancytoastlib.FancyToast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -45,8 +36,6 @@ public class PresetFragment extends Fragment implements OnRecyclerListener {
 
     private DBOpenHelper helper;
     private SQLiteDatabase db;
-    private int testIDs = 0;
-    private Boolean inserted = false;
     private FloatingActionButton floatingActionButton;
 
     private static final String TABLE_NAME = "stationdb";
@@ -56,6 +45,8 @@ public class PresetFragment extends Fragment implements OnRecyclerListener {
     private ArrayList<String> stationData = new ArrayList<>();
     private ArrayList<Integer> alertLineData = new ArrayList<>();
     private ArrayList<String> timeData = new ArrayList<>();
+    private ArrayList<Double> latData = new ArrayList<>();
+    private ArrayList<Double> lngData = new ArrayList<>();
 
 
     @Override
@@ -90,11 +81,10 @@ public class PresetFragment extends Fragment implements OnRecyclerListener {
         });
 
         mAdapter.notifyDataSetChanged();
-//        insertData();
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerClicked(View v, final int position) {
         TextView lineText = (TextView) v.findViewById(R.id.preset_line);
         TextView stationText = (TextView) v.findViewById(R.id.preset_station);
         TextView alertText = (TextView) v.findViewById(R.id.preset_alertline);
@@ -109,6 +99,12 @@ public class PresetFragment extends Fragment implements OnRecyclerListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FancyToast.makeText(getActivity(), "セットしました", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+                        Intent intent = new Intent(getActivity(), GetLocationService.class);
+                        intent.putExtra("Lat", latData.get(position));
+                        intent.putExtra("Lng", lngData.get(position));
+                        intent.putExtra("alertLine", (double) alertLineData.get(position) / 1000);
+                        intent.putExtra("goalStation", stationData.get(position));
+                        getActivity().startService(intent);
                     }
                 })
                 .setNegativeButton("キャンセル", null)
@@ -135,6 +131,8 @@ public class PresetFragment extends Fragment implements OnRecyclerListener {
                         String removeSelect = timeData.get(fromPos);
                         Log.d("#####削除#####"," : "+removeSelect);
                         timeData.remove(fromPos);
+                        latData.remove(fromPos);
+                        lngData.remove(fromPos);
                         db.delete(TABLE_NAME, "_id = " + removeSelect, null);
                         mAdapter.notifyItemRemoved(fromPos);
                     }
@@ -173,6 +171,8 @@ public class PresetFragment extends Fragment implements OnRecyclerListener {
             lineData.add(cursor.getString(1));
             stationData.add(cursor.getString(2));
             alertLineData.add(cursor.getInt(3));
+            latData.add(cursor.getDouble(4));
+            lngData.add(cursor.getDouble(5));
             cursor.moveToNext();
         }
 
@@ -195,6 +195,8 @@ public class PresetFragment extends Fragment implements OnRecyclerListener {
                 stationData.clear();
                 alertLineData.clear();
                 timeData.clear();
+                latData.clear();
+                lngData.clear();
                 readData();
                 mAdapter.notifyDataSetChanged();
             } else {

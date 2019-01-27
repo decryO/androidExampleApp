@@ -1,6 +1,7 @@
 package com.test.stationalertapplication;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -33,6 +35,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +45,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
     private Toolbar toolbar;
     private TabLayout tabLayout;
     public boolean isAllowedLocation = false;
@@ -58,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         //setContentViewを↑のgetWindowより上に配置するとエラーが出るのでここに置く
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -112,22 +118,8 @@ public class MainActivity extends AppCompatActivity {
                     gotoAboutThisApp();
                 } else if (id == R.id.menu_search) {
                     gotoSearch();
-                } else if (id == R.id.menu_add) {
-                    //gotoAddPreset();
-                    insertData();
                 }
                 return false;
-            }
-        });
-    }
-
-    public void settingToolbar(String title) {
-        toolbar.setTitle(title);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().popBackStack();
             }
         });
     }
@@ -181,6 +173,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void clearStopFragment() {
+        tabLayout.setVisibility(View.INVISIBLE);
+        StopServiceFragment stopServiceFragment = new StopServiceFragment();
+        transaction.remove(stopServiceFragment);
+        transaction.commit();
+    }
+
     private void gotoSetting() {
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
@@ -197,23 +196,4 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
-    private void gotoAddPreset() {
-        Intent intent = new Intent(this, AddPresetActivity.class);
-        startActivity(intent);
-    }
-
-    public void insertData(){
-
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss.SSS", Locale.JAPAN);
-        String date = df.format(new Date());
-        ContentValues values = new ContentValues();
-        values.put("line", date);
-        values.put("stationname", "駅");
-        values.put("alertline", 8);
-        values.put("lat", 0);
-        values.put("lng", 0);
-        values.put("time", date);
-
-        db.insert("stationdb", null, values);
-    }
 }

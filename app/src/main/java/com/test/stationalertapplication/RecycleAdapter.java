@@ -57,7 +57,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, final int i) {
         holder.presetLine.setText(lineData.get(i));
         holder.presetStation.setText(stationData.get(i));
-        holder.presetAlertLine.setText(String.valueOf(alertLineData.get(i)));
+        holder.presetAlertLine.setText("半径" + String.valueOf(alertLineData.get(i)) + "m");
         holder.timehold.setText(timeData.get(i));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

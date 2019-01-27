@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -66,6 +67,8 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
     private ArrayList<String> stationArray = new ArrayList<>();
     // 駅名
     private String goalStation;
+    // 路線名
+    private String goalLine;
 
     // 駅座標を取得する際、JSONは路線選択に使用したものでよいので、
     // ここに作っておいて、どこからでも呼べるようにする。
@@ -101,20 +104,20 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
         super.onStart();
         
         latLng = new LatLng(34.985458, 135.7577551);
-        radiusSeek = findViewById(R.id.seekBar);
-        radiusView = findViewById(R.id.textView);
+        radiusSeek = findViewById(R.id.add_seekBar);
+        radiusView = findViewById(R.id.add_alert_text);
         preList = getResources().getStringArray(R.array.prefectures);
 
-        button1 = findViewById(R.id.button);
-        button3 = findViewById(R.id.button3);
-        button4 = findViewById(R.id.button4);
-        button5 = findViewById(R.id.button5);
+        button1 = findViewById(R.id.add_button);
+        button3 = (Button) findViewById(R.id.add_ToDoFu);
+        button4 = findViewById(R.id.add_Line);
+        button5 = findViewById(R.id.add_Station);
         button4.setVisibility(View.INVISIBLE);
         button5.setVisibility(View.INVISIBLE);
 
-        PrefectureText = findViewById(R.id.ToDoHuText);
-        LineText = findViewById(R.id.RosenText);
-        StationText = findViewById(R.id.EkiText);
+        PrefectureText = findViewById(R.id.add_ToDoHuText);
+        LineText = findViewById(R.id.add_LineText);
+        StationText = findViewById(R.id.add_stationText);
         
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("プリセット追加");
@@ -122,6 +125,11 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent data = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("test.String", "あいうえお");
+                data.putExtras(bundle);
+                setResult(RESULT_CANCELED, data);
                 finish();
             }
         });
@@ -156,14 +164,12 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
 //                    intent.putExtra("goalStation", goalStation);
 //
 //                }
-                SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss.SSS", Locale.JAPAN);
-                String date = df.format(new Date());
                 ContentValues values = new ContentValues();
-                values.put("line", date);
-                values.put("stationname", "駅");
-                values.put("alertline", 8);
-                values.put("lat", 0);
-                values.put("lng", 0);
+                values.put("line", goalLine);
+                values.put("stationname", goalStation);
+                values.put("alertline", alertLine);
+                values.put("lat", goalLat);
+                values.put("lng", goalLng);
 
                 db.insert("stationdb", null, values);
 
@@ -179,7 +185,7 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(getApplicationContext())
+                new AlertDialog.Builder(AddPresetActivity.this)
                         .setTitle("目的地の都道府県選択")
                         .setItems(R.array.prefectures, new DialogInterface.OnClickListener() {
                             @SuppressLint("StaticFieldLeak")
@@ -195,6 +201,7 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
                                     @Override
                                     protected String doInBackground(Void... params) {
                                         String res = null;
+                                        Log.d("ああああああああああああああああああ", "てすとおおおおおおおおおお");
                                         try {
                                             String result = run("http://express.heartrails.com/api/json?method=getLines&prefecture=" + ans);
                                             JSONObject resJson = new JSONObject(result);
@@ -229,7 +236,7 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
             public void onClick(View v) {
                 if (preArray.size() != 0) {
                     final CharSequence[] cs = preArray.toArray(new CharSequence[preArray.size()]);
-                    new AlertDialog.Builder(getApplicationContext())
+                    new AlertDialog.Builder(AddPresetActivity.this)
                             .setTitle("目的地への路線選択")
                             .setItems(cs, new DialogInterface.OnClickListener() {
                                 @SuppressLint("StaticFieldLeak")
@@ -246,6 +253,7 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
                                             String res = null;
                                             try {
                                                 String result = run("http://express.heartrails.com/api/json?method=getStations&line=" + ans);
+                                                goalLine = ans;
                                                 JSONObject resJson = new JSONObject(result);
                                                 JSONObject ans = resJson.getJSONObject("response");
                                                 stationList = ans.getJSONArray("station");
@@ -279,7 +287,7 @@ public class AddPresetActivity extends AppCompatActivity implements OnMapReadyCa
             public void onClick(View v) {
                 if (stationArray.size() != 0) {
                     final CharSequence[] cs = stationArray.toArray(new CharSequence[stationArray.size()]);
-                    new AlertDialog.Builder(getApplicationContext())
+                    new AlertDialog.Builder(AddPresetActivity.this)
                             .setTitle("目的地の駅選択")
                             .setItems(cs, new DialogInterface.OnClickListener() {
                                 @SuppressLint("StaticFieldLeak")

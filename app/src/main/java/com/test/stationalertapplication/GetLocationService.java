@@ -102,11 +102,6 @@ public class GetLocationService extends Service {
         String channelId = "default";
         String title = context.getString(R.string.app_name);
 
-        //headSetPlugReceiver = new HeadSetPlugReceiver();
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction(Intent.ACTION_HEADSET_PLUG);
-//        registerReceiver(headSetPlugReceiver, filter);
-
         Lat = intent.getDoubleExtra("Lat", 0);
         Lng = intent.getDoubleExtra("Lng", 0);
         goalStation = intent.getStringExtra("goalStation");
@@ -197,8 +192,8 @@ public class GetLocationService extends Service {
                 Log.d("2点間の距離", "\n" + String.valueOf(resultRadius) + "Km");
 
                 // AlertDialogが出まくるのを防ぐため、一度出たらcounterをインクリメントして出さなくする。
-                //if (resultRadius < alertLine) {   //本番用
-                if(counter == 1){                   //テスト用
+                if (resultRadius < alertLine) {   //本番用
+                //if(counter == 1){                   //テスト用
 
                     startFoundDevice();
 
@@ -255,7 +250,6 @@ public class GetLocationService extends Service {
 
     public void startFoundDevice() {
         AudioDeviceInfo[] audioDevices = mAudioManager.getDevices(AudioManager.GET_DEVICES_ALL);
-        Log.d("\n\n\n\nおおおおおおおおおおおおおおおおおおおおおおおおおおおお", "おおおおおおおおおおおおああああああああああああ");
         for (AudioDeviceInfo audio_device : audioDevices) {
             String temp = myAudioTypeToReadableString(audio_device.getType());
             if(temp.equals("TYPE_WIRED_HEADSET") || temp.equals("TYPE_WIRED_HEADPHONE")) {
